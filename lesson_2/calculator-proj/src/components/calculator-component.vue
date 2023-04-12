@@ -28,9 +28,35 @@
         {{ operand }}
       </button>
     </div>
-    <div class="fibonacci">
-      first cell fibonacci: {{ fib1 }} second cell fibonacci:
-      {{ fib2 }}
+    <div class="screen-keyboard">
+      <label for="screenKeyboard">Отобразить экранную клавиатуру</label>
+      <input
+        v-model="screenKeyboard"
+        type="checkbox"
+        name="screenKeyboard"
+        id="screenKeyboard"
+      />
+      <div v-show="screenKeyboard" class="keyboards">
+        <button
+          v-for="btn in screenKeys"
+          :key="btn"
+          @click="screenKeysAdd(btn, operandTarget)"
+        >
+          {{ btn }}
+        </button>
+        <br />
+        <label v-for="target in screenOperandTarget" :key="target"
+          >{{ target }}
+          <input
+            v-model="operandTarget"
+            type="radio"
+            :value="target"
+            name="operatorTarget"
+          />
+        </label>
+        <br />
+        checked: {{ operandTarget }}
+      </div>
     </div>
     <div class="logs-box">
       <div v-for="(log, date, idx) in logs" :key="date">
@@ -52,12 +78,14 @@ export default {
       result: 0,
       error: "",
       logs: {},
+      screenKeyboard: false,
+      screenKeys: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "Backspace"],
+      screenOperandTarget: ["operand1", "operand2"],
+      operandTarget: "operand1",
     };
   },
   methods: {
     calculate(operation = "+") {
-      this.fib1result = this.fib1;
-      this.fib2result = this.fib2;
       this.error = "";
       switch (operation) {
         case "+":
@@ -112,13 +140,14 @@ export default {
     fib(n) {
       return n <= 1 ? n : this.fib(n - 1) + this.fib(n - 2);
     },
-  },
-  computed: {
-    fib1() {
-      return this.fib(this.operand1);
-    },
-    fib2() {
-      return this.fib(this.operand2);
+    screenKeysAdd(value, target) {
+      console.log(value, target);
+      console.log(this[target]);
+      if (Number(value)) {
+        this[target] = Number(String(this[target]) + value);
+      } else {
+        this[target] = Number(String(this[target]).slice(0, -1));
+      }
     },
   },
 };
