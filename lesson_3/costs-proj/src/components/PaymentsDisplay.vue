@@ -1,8 +1,27 @@
 <template>
   <div class="wrapper">
-    <div class="item" v-for="(item, idx) in items" :key="idx">
-      {{ item }}
-    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="item"
+          v-for="({ date, category, value }, idx) in items"
+          :key="idx"
+        >
+          <th>{{ idx + 1 }}</th>
+          <td>{{ date }}</td>
+          <td>{{ category }}</td>
+          <td>{{ value }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 

@@ -1,14 +1,13 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <button @click="show = !show">show/hide</button>
-    <counter-button v-if="show" />
     <div class="wrapper">
       <header class="header">
         <div class="title">My personal costs</div>
       </header>
       <main>
-        <add-payment-form @addNewPayment="addToPaymentList" />
+        <button @click="show = !show">add payment</button>
+        <add-payment-form v-if="show" @addNewPayment="addToPaymentList" />
         <payments-display :items="paymentsList" />
       </main>
     </div>
@@ -16,14 +15,12 @@
 </template>
 
 <script>
-import counterButton from "./components/counter-button.vue";
 import PaymentsDisplay from "./components/PaymentsDisplay.vue";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
 
 export default {
   name: "App",
   components: {
-    counterButton,
     PaymentsDisplay,
     AddPaymentForm,
   },
