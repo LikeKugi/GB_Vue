@@ -7,8 +7,15 @@
       </header>
       <main>
         <button @click="show = !show">add payment</button>
-        <add-payment-form v-if="show" @addNewPayment="addToPaymentList" />
-        <payments-display :items="paymentsList" />
+        <add-payment-form v-if="show" />
+        <payments-display :items="currentElements" />
+        <div class="total" v-if="fullPrice">Total cost: {{ fullPrice }}</div>
+        <pagination-list
+          :cur="page"
+          :n="n"
+          :length="paymentsList.length"
+          @paginate="changePage"
+        />
       </main>
     </div>
   </div>
@@ -17,45 +24,66 @@
 <script>
 import PaymentsDisplay from "./components/PaymentsDisplay.vue";
 import AddPaymentForm from "./components/AddPaymentForm.vue";
+import PaginationList from "./components/PaginationList.vue";
+import { mapMutations, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "App",
   components: {
     PaymentsDisplay,
     AddPaymentForm,
+    PaginationList,
   },
   data() {
     return {
-      show: true,
-      paymentsList: [],
+      show: false,
+      page: 1,
+      n: 10,
     };
   },
   methods: {
-    fetchData() {
-      return [
-        {
-          date: "28.03.2020",
-          category: "Food",
-          value: 169,
-        },
-        {
-          date: "24.03.2020",
-          category: "Transport",
-          value: 360,
-        },
-        {
-          date: "24.03.2020",
-          category: "Food",
-          value: 532,
-        },
-      ];
+    ...mapMutations(["setPaymentsListData"]),
+    ...mapActions(["fetchData"]),
+    changePage(p) {
+      this.page = p;
     },
-    addToPaymentList(data) {
-      this.paymentsList.push(data);
+    // fetchData() {
+    //   return [
+    //     {
+    //       date: "28.03.2020",
+    //       category: "Food",
+    //       value: 169,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Transport",
+    //       value: 360,
+    //     },
+    //     {
+    //       date: "24.03.2020",
+    //       category: "Food",
+    //       value: 532,
+    //     },
+    //   ];
+    // },
+    // addToPaymentList(data) {
+    //   this.paymentsList.push(data);
+    // },
+  },
+  computed: {
+    ...mapGetters({
+      fullPrice: "getPaymentsFullValuePrice",
+      paymentsList: "getPaymentsList",
+    }),
+    currentElements() {
+      const { n, page } = this;
+      return this.paymentsList.slice(n * (page - 1), n * (page - 1) + n);
     },
   },
   created() {
-    this.paymentsList = this.fetchData();
+    // this.setPaymentsListData(this.fetchData());
+    this.$store.dispatch("fetchData");
+    // this.$store.commit("setPaymentsListData", this.fetchData());
   },
 };
 </script>

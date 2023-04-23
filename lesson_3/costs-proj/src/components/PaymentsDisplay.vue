@@ -12,10 +12,10 @@
       <tbody>
         <tr
           class="item"
-          v-for="({ date, category, value }, idx) in items"
+          v-for="({ date, category, value, id }, idx) in items"
           :key="idx"
         >
-          <th>{{ idx + 1 }}</th>
+          <th>{{ id }}</th>
           <td>{{ date }}</td>
           <td>{{ category }}</td>
           <td>{{ value }}</td>
