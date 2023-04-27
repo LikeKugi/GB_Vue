@@ -4,86 +4,52 @@
     <div class="wrapper">
       <header class="header">
         <div class="title">My personal costs</div>
+        <nav class="nav">
+          <a href="#dashboard">Dashboard</a> / <a href="#about">About</a> /
+          <a href="#notfound">Not Found</a>
+        </nav>
       </header>
       <main>
-        <button @click="show = !show">add payment</button>
-        <add-payment-form v-if="show" />
-        <payments-display :items="currentElements" />
-        <div class="total" v-if="fullPrice">Total cost: {{ fullPrice }}</div>
-        <pagination-list
-          :cur="page"
-          :n="n"
-          :length="paymentsList.length"
-          @paginate="changePage"
-        />
+        <dashboard-view v-if="page === 'dashboard'" />
+        <about-us v-else-if="page === 'about'" />
+        <not-found v-else />
       </main>
     </div>
   </div>
 </template>
 
 <script>
-import PaymentsDisplay from "./components/PaymentsDisplay.vue";
-import AddPaymentForm from "./components/AddPaymentForm.vue";
-import PaginationList from "./components/PaginationList.vue";
-import { mapMutations, mapGetters, mapActions } from "vuex";
+import AboutUs from "./views/AboutUs.vue";
+import DashboardView from "./views/DashboardView.vue";
+import NotFound from "./views/NotFound.vue";
 
 export default {
   name: "App",
-  components: {
-    PaymentsDisplay,
-    AddPaymentForm,
-    PaginationList,
-  },
   data() {
     return {
-      show: false,
-      page: 1,
-      n: 10,
+      page: "",
     };
   },
+  components: {
+    DashboardView,
+    AboutUs,
+    NotFound,
+  },
+  comments: {
+    DashboardView,
+    AboutUs,
+    NotFound,
+  },
   methods: {
-    ...mapMutations(["setPaymentsListData"]),
-    ...mapActions(["fetchData"]),
-    changePage(p) {
-      this.page = p;
-    },
-    // fetchData() {
-    //   return [
-    //     {
-    //       date: "28.03.2020",
-    //       category: "Food",
-    //       value: 169,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Transport",
-    //       value: 360,
-    //     },
-    //     {
-    //       date: "24.03.2020",
-    //       category: "Food",
-    //       value: 532,
-    //     },
-    //   ];
-    // },
-    // addToPaymentList(data) {
-    //   this.paymentsList.push(data);
-    // },
-  },
-  computed: {
-    ...mapGetters({
-      fullPrice: "getPaymentsFullValuePrice",
-      paymentsList: "getPaymentsList",
-    }),
-    currentElements() {
-      const { n, page } = this;
-      return this.paymentsList.slice(n * (page - 1), n * (page - 1) + n);
+    setPage() {
+      this.page = location.hash.slice(1);
     },
   },
-  created() {
-    // this.setPaymentsListData(this.fetchData());
-    this.$store.dispatch("fetchData");
-    // this.$store.commit("setPaymentsListData", this.fetchData());
+  mounted() {
+    this.setPage();
+    window.addEventListener("hashchange", () => {
+      this.setPage();
+    });
   },
 };
 </script>
