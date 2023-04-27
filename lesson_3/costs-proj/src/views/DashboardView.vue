@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div>
     <button @click="show = !show">add payment</button>
     <add-payment-form v-if="show" />
     <payments-display :items="currentElements" />
@@ -10,7 +10,7 @@
       :length="paymentsList.length"
       @paginate="changePage"
     />
-  </main>
+  </div>
 </template>
 
 <script>
@@ -50,8 +50,12 @@ export default {
       return this.paymentsList.slice(n * (page - 1), n * (page - 1) + n);
     },
   },
-  created() {
-    this.$store.dispatch("fetchData");
+  async created() {
+    // this.$store.dispatch("fetchData");
+    await this.fetchData();
+    if (this.$route.params?.page) {
+      this.page = +this.$route.params?.page;
+    }
   },
 };
 </script>

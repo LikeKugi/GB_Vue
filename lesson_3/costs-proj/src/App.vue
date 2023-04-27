@@ -5,61 +5,31 @@
       <header class="header">
         <div class="title">My personal costs</div>
         <nav class="nav">
-          <a class="nav__link" href="dashboard">Dashboard</a> /
-          <a class="nav__link" href="about">About</a> /
-          <a class="nav__link" href="notfound">Not Found</a>
+          <ul>
+            <li>
+              <router-link to="/dashboard">Dashboard</router-link>
+            </li>
+            <li>&nbsp;/&nbsp;</li>
+            <li>
+              <router-link :to="{ name: 'about' }">About</router-link>
+            </li>
+            <li>&nbsp;/&nbsp;</li>
+            <li>
+              <router-link :to="{ name: 'notfound' }">Not Found</router-link>
+            </li>
+          </ul>
         </nav>
       </header>
       <main>
-        <dashboard-view v-if="page === 'dashboard'" />
-        <about-us v-else-if="page === 'about'" />
-        <not-found v-else />
+        <router-view />
       </main>
     </div>
   </div>
 </template>
 
 <script>
-import AboutUs from "./views/AboutUs.vue";
-import DashboardView from "./views/DashboardView.vue";
-import NotFound from "./views/NotFound.vue";
-
 export default {
   name: "App",
-  data() {
-    return {
-      page: "",
-    };
-  },
-  components: {
-    DashboardView,
-    AboutUs,
-    NotFound,
-  },
-  comments: {
-    DashboardView,
-    AboutUs,
-    NotFound,
-  },
-  methods: {
-    setPage() {
-      this.page = location.pathname.slice(1);
-    },
-  },
-  mounted() {
-    this.setPage();
-    const links = document.querySelectorAll(".nav__link");
-    links.forEach((link) => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        history.pushState({}, "", link.href);
-        this.setPage();
-      });
-    });
-    window.addEventListener("popstate", () => {
-      this.setPage();
-    });
-  },
 };
 </script>
 
@@ -71,5 +41,16 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+ul {
+  max-width: 500px;
+  padding: 50px 0;
+  margin: 0 auto;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-evenly;
+}
+li {
+  width: calc(100% / 5);
 }
 </style>

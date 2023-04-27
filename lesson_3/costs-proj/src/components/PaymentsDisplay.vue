@@ -36,3 +36,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.wrapper {
+  padding: 15px 0;
+}
+table {
+  margin: 0 auto;
+}
+</style>
