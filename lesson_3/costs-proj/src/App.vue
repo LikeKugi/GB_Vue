@@ -5,8 +5,9 @@
       <header class="header">
         <div class="title">My personal costs</div>
         <nav class="nav">
-          <a href="#dashboard">Dashboard</a> / <a href="#about">About</a> /
-          <a href="#notfound">Not Found</a>
+          <a class="nav__link" href="dashboard">Dashboard</a> /
+          <a class="nav__link" href="about">About</a> /
+          <a class="nav__link" href="notfound">Not Found</a>
         </nav>
       </header>
       <main>
@@ -42,12 +43,20 @@ export default {
   },
   methods: {
     setPage() {
-      this.page = location.hash.slice(1);
+      this.page = location.pathname.slice(1);
     },
   },
   mounted() {
     this.setPage();
-    window.addEventListener("hashchange", () => {
+    const links = document.querySelectorAll(".nav__link");
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        history.pushState({}, "", link.href);
+        this.setPage();
+      });
+    });
+    window.addEventListener("popstate", () => {
       this.setPage();
     });
   },
