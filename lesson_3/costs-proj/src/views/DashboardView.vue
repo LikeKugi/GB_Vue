@@ -4,12 +4,7 @@
     <add-payment-form v-if="show" />
     <payments-display :items="currentElements" />
     <div class="total" v-if="fullPrice">Total cost: {{ fullPrice }}</div>
-    <pagination-list
-      :cur="page"
-      :n="n"
-      :length="paymentsList.length"
-      @paginate="changePage"
-    />
+    <pagination-list :cur="page" :n="n" :length="12" @paginate="changePage" />
   </div>
 </template>
 
@@ -30,7 +25,7 @@ export default {
     return {
       show: false,
       page: 1,
-      n: 10,
+      n: 3,
     };
   },
   methods: {
@@ -38,6 +33,7 @@ export default {
     ...mapActions(["fetchData"]),
     changePage(p) {
       this.page = p;
+      this.fetchData(p);
     },
   },
   computed: {
@@ -52,7 +48,7 @@ export default {
   },
   async created() {
     // this.$store.dispatch("fetchData");
-    await this.fetchData();
+    await this.fetchData(1);
     if (this.$route.params?.page) {
       this.page = +this.$route.params?.page;
     }
