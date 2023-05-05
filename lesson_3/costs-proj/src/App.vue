@@ -23,13 +23,38 @@
       <main>
         <router-view />
       </main>
+      <modal-window-add-payment-form :settings="settings" v-if="modalShow" />
     </div>
   </div>
 </template>
 
 <script>
+import ModalWindowAddPaymentForm from "./components/ModalWindowAddPaymentForm.vue";
+
 export default {
   name: "App",
+  components: { ModalWindowAddPaymentForm },
+  data() {
+    return {
+      modalShow: false,
+      settings: {
+        content: "auth",
+        header: "Auth form",
+      },
+    };
+  },
+  methods: {
+    goToPageNotFound() {
+      if (this.$route.name === "notfound") return;
+      this.$router.push({
+        name: "notfound",
+      });
+    },
+  },
+  created() {
+    this.$modal.show();
+    this.$modal.hide();
+  },
 };
 </script>
 

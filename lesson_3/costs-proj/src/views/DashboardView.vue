@@ -1,7 +1,6 @@
 <template>
   <div>
     <button @click="show = !show">add payment</button>
-    <add-payment-form v-if="show" />
     <payments-display :items="currentElements" />
     <div class="total" v-if="fullPrice">Total cost: {{ fullPrice }}</div>
     <pagination-list
@@ -10,13 +9,13 @@
       :length="paymentsList.length"
       @paginate="changePage"
     />
+    <button @click="addFormShow = true">Add new cost +</button>
   </div>
 </template>
 
 <script>
 import { mapActions, mapMutations, mapGetters } from "vuex";
 import PaymentsDisplay from "@/components/PaymentsDisplay.vue";
-import AddPaymentForm from "@/components/AddPaymentForm.vue";
 import PaginationList from "@/components/PaginationList.vue";
 
 export default {
@@ -24,11 +23,10 @@ export default {
   components: {
     PaymentsDisplay,
     PaginationList,
-    AddPaymentForm,
   },
   data() {
     return {
-      show: false,
+      addFormShow: false,
       page: 1,
       n: 10,
     };
